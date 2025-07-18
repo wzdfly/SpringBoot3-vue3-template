@@ -3,7 +3,7 @@
 </script>
 
 <template>
-dbmove
+  <div>dbmove</div>
 </template>
 
 <style scoped>

@@ -6,7 +6,7 @@ spring:
 #    password: SYSDBA001
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://3306/template
+    url: jdbc:mysql://localhost:3306/template
     username: root
     password: 123456
   mail:
@@ -14,7 +14,7 @@ spring:
     username: 1689411538@qq.com
     password: lxvtoyflfydrcehi
     properties:
-      from: qxd
+      from: 1689411538@qq.com
   # 移除Redis配置
   # data:
   #   redis:

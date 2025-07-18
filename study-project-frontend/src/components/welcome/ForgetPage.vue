@@ -1,6 +1,7 @@
 
 <template>
-    <transition  name="el-fade-in-linear" mode="out-in">
+  <div>
+    <transition name="el-fade-in-linear" mode="out-in">
         <div style="padding: 20px;height: 100%" v-if="active === 0">
             <div style="margin-top: 130px;text-align: center">
                 <div style="font-size: 25px">重置密码</div>
@@ -24,7 +25,7 @@
                     <el-form-item prop="code">
                         <el-row :gutter="10" style="display:flow; width:100%;">
                             <el-col :span="17" >
-                                <el-input v-model="form.code" :maxLength="6" type="text" :maxlength="6" placeholder="验证码">
+                                <el-input v-model="form.code" :maxlength="6" type="text" placeholder="验证码">
                                     <template #prefix>
                                         <el-icon><EditPen /></el-icon>
                                     </template>
@@ -44,43 +45,43 @@
                 <el-button @click="startReset" style="width: 270px;" type="warning">开始重置密码</el-button>
             </div>
         </div>
-
     </transition>
-    <transition  name="el-fade-in-linear" mode="out-in">
-    <div style="padding: 20px" v-if="active === 1">
-        <div style="margin-top: 130px;text-align: center">
-            <div style="font-size: 25px">重置密码</div>
-            <div style="font-size: 14px">请重复输入新密码</div>
+    <transition name="el-fade-in-linear" mode="out-in">
+        <div style="padding: 20px" v-if="active === 1">
+            <div style="margin-top: 130px;text-align: center">
+                <div style="font-size: 25px">重置密码</div>
+                <div style="font-size: 14px">请重复输入新密码</div>
+            </div>
+            <div style="padding: 10px;margin-top: 20px;" >
+                <el-steps :active="active" finish-status="success" style="font-size: 14px" align-center>
+                    <el-step title="验证邮箱"></el-step>
+                    <el-step title="重设密码"></el-step>
+                </el-steps>
+            </div>
+            <div style="margin-top: 50px">
+                <el-form  :model="form" :rules="rules" @validate="onValidate" ref="formRef">
+                    <el-form-item prop="password">
+                        <el-input  v-model="form.password" :maxlength="16" type="password" placeholder="密码">
+                            <template #prefix>
+                                <el-icon><Lock /></el-icon>
+                            </template>
+                        </el-input>
+                    </el-form-item>
+                    <el-form-item prop="password_repeat">
+                        <el-input  v-model="form.password_repeat" :maxLength="16" type="password" placeholder="重复输入密码">
+                            <template #prefix>
+                                <el-icon><Lock /></el-icon>
+                            </template>
+                        </el-input>
+                    </el-form-item>
+                </el-form>
+            </div>
+            <div style="margin-top: 40px;text-align: center">
+                <el-button @click="doReset" style="width: 270px;" type="warning">立即重置密码</el-button>
+            </div>
         </div>
-        <div style="padding: 10px;margin-top: 20px;" >
-            <el-steps :active="active" finish-status="success" style="font-size: 14px" align-center>
-                <el-step title="验证邮箱"></el-step>
-                <el-step title="重设密码"></el-step>
-            </el-steps>
-        </div>
-        <div style="margin-top: 50px">
-            <el-form  :model="form" :rules="rules" @validate="onValidate" ref="formRef">
-                <el-form-item prop="password">
-                    <el-input  v-model="form.password" :maxlength="16" type="password" placeholder="密码">
-                        <template #prefix>
-                            <el-icon><Lock /></el-icon>
-                        </template>
-                    </el-input>
-                </el-form-item>
-                <el-form-item prop="password_repeat">
-                    <el-input  v-model="form.password_repeat" :maxLength="16" type="password" placeholder="重复输入密码">
-                        <template #prefix>
-                            <el-icon><Lock /></el-icon>
-                        </template>
-                    </el-input>
-                </el-form-item>
-            </el-form>
-        </div>
-        <div style="margin-top: 40px;text-align: center">
-            <el-button @click="doReset" style="width: 270px;" type="warning">立即重置密码</el-button>
-        </div>
-    </div>
     </transition>
+  </div>
 </template>
 
 <style scoped>

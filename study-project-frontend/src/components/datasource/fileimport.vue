@@ -3,8 +3,7 @@
 </script>
 
 <template>
-  fileimport
-
+  <div>fileimport</div>
 </template>
 
 <style scoped>
