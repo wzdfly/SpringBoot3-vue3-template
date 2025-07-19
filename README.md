@@ -33,13 +33,19 @@
 ## 运行命令
 
 - 1、后端运行：
-在SpringBoot3-vue3-template> 下运行以下命令
-cd study-project-backend
-mvn clean install
+在SpringBoot3-vue3-template> 下运行以下命令  
+
+cd study-project-backend  
+
+mvn clean install  
+
 mvn spring-boot:run
 - 2、前端运行：
 在SpringBoot3-vue3-template> 下运行以下命令
+
 cd study-project-frontend
+
 npm install
+
 npm run dev
 - 3、浏览器访问http://localhost:5173
