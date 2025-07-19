@@ -57,17 +57,35 @@ const form = reactive({
     remember:false
 })
 
-const login = () =>{  
+const login = () => {
     if(!form.username || !form.password){ 
         ElMessage.warning('请填写用户名和密码！')
-    }else{
-        post('/api/auth/login',{
-            username:form.username,
-            password:form.password,
-            remember:form.remember
-        }, (message)=>{
-            ElMessage.success(message)
-            router.push('/index')
+    } else {
+        post('/api/auth/login', {
+            username: form.username,
+            password: form.password,
+            remember: form.remember
+        }, (data) => {
+            // 添加调试日志
+            console.log('登录成功，返回数据：', data);
+            
+            // 现在 data 是完整的对象：{message: "登录成功", role: "USER", username: "xxx"}
+            ElMessage.success(data.message || '登录成功')
+            
+            // 根据角色跳转到不同界面
+            if (data.role === 'ADMIN') {
+                router.push('/admin')  // 管理员界面
+            } else {
+                router.push('/index')  // 普通用户界面
+            }
+        }, (message) => {
+            // 添加失败处理的调试日志
+            console.log('登录失败：', message);
+            ElMessage.error(message || '登录失败');
+        }, (error) => {
+            // 添加错误处理的调试日志
+            console.log('登录错误：', error);
+            ElMessage.error('发生了一些错误，请联系管理员');
         })
     }
 }

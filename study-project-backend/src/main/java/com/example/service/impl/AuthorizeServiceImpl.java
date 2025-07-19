@@ -40,15 +40,20 @@ public class AuthorizeServiceImpl implements AuthorizeService {
     BCryptPasswordEncoder encoder;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException{
-        if(username == null){
-            throw new UsernameNotFoundException("user name can't be null");
-        }
-        Account account = mapper.findAccountByNameOrEmail(username);
-        if(account == null){
-            throw new UsernameNotFoundException("username or password is fault");
-        }
-        return User.withUsername(account.getUsername()).password(account.getPassword()).roles("USERS").build();
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        if(username == null)
+            throw new UsernameNotFoundException("用户名不能为空");
+        Account account = mapper.findAccountWithRoleByUsername(username);
+        if(account == null)
+            throw new UsernameNotFoundException("用户名或密码错误");
+        
+        // 根据数据库中的角色设置权限
+        String role = account.getRole() != null ? account.getRole() : "USER";
+        return User
+                .withUsername(account.getUsername())
+                .password(account.getPassword())
+                .roles(role)  // 使用数据库中的角色
+                .build();
     }
 
     @Override

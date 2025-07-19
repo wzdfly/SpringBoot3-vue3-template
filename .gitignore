@@ -63,3 +63,9 @@ build/
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# 敏感配置文件
+application-local.yaml
+application-local.yml
+*.local.yaml
+*.local.yml

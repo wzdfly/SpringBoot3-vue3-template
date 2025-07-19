@@ -1,20 +1,16 @@
 #application.yaml
 spring:
-#  datasource:
-#    driver-class-name: dm.jdbc.driver.DmDriver
-#    url: jdbc:dm://47.115.201.125:5236?schema=PRODUCTION
-#    username: SYSDBA
-#    password: SYSDBA001
+  profiles:
+    active: local
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/template
     username: root
-    password: 123456
+    # password 在 application-local.yaml 中配置
   mail:
     host: smtp.qq.com
     port: 587
-    username: 1689411538@qq.com
-    password: lxvtoyflfydrcehi
+    # username, password, from 在 application-local.yaml 中配置
     properties:
       mail:
         smtp:
@@ -24,11 +20,3 @@ spring:
             required: true
           ssl:
             trust: smtp.qq.com
-      from: 1689411538@qq.com
-  # 移除Redis配置
-  # data:
-  #   redis:
-  #     database: 0
-  #     host: #
-  #     port: 6379
-  #     password:

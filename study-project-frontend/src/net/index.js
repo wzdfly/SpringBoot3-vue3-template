@@ -10,23 +10,38 @@ function post(url, data, success, failure = defaultFailure, error = defaultError
         headers: {
             'Content-Type': 'application/json'
         },
-        withCredentials: true // 保持Session认证
+        withCredentials: true
     }).then(({ data }) => {
-        if (data.success)
+        console.log('完整的后端响应：', data);
+        
+        if (data.success) {
+            console.log('成功响应，data.message：', data.message);
+            // 修改：传递 data.message 而不是 data.data
             success(data.message, data.status);
-        else
-            failure(data.message, data.status);
+        } else {
+            console.log('失败响应，data：', data);
+            // 处理失败情况
+            const errorMessage = (typeof data.message === 'object' && data.message.message) 
+                ? data.message.message 
+                : data.message;
+            failure(errorMessage, data.status);
+        }
     }).catch(error);
 }
 
 function get(url, success, failure = defaultFailure, error = defaultError) {
     axios.get(url, {
-        withCredentials: true // 保持Session认证
+        withCredentials: true
     }).then(({ data }) => {
-        if (data.success)
+        if (data.success) {
+            // 同样修改 GET 方法
             success(data.message, data.status);
-        else
-            failure(data.message, data.status);
+        } else {
+            const errorMessage = (typeof data.message === 'object' && data.message.message) 
+                ? data.message.message 
+                : data.message;
+            failure(errorMessage, data.status);
+        }
     }).catch(error);
 }
 

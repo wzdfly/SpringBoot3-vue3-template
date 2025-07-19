@@ -33,34 +33,46 @@ public class AuthorizeController {
 
     // 登录接口
     @PostMapping("/login")
-    public RestBean<String> login(@RequestBody Map<String, Object> loginData, HttpServletRequest request) {
+    public RestBean<Map<String, Object>> login(@RequestBody Map<String, Object> loginData, HttpServletRequest request) {
         String username = (String) loginData.get("username");
         String password = (String) loginData.get("password");
-        // Boolean remember = (Boolean) loginData.get("remember");
         
         if (username == null || password == null || username.trim().isEmpty() || password.trim().isEmpty()) {
-            return RestBean.failure(400, "用户名和密码不能为空");
+            // 修复：返回 Map 类型而不是 String
+            Map<String, Object> errorResult = new java.util.HashMap<>();
+            errorResult.put("message", "用户名和密码不能为空");
+            return RestBean.failure(400, errorResult);
         }
         
         try {
-            // 创建认证令牌
             UsernamePasswordAuthenticationToken authToken = 
                 new UsernamePasswordAuthenticationToken(username, password);
             
-            // 进行认证
             Authentication authentication = authenticationManager.authenticate(authToken);
-            
-            // 设置安全上下文
             SecurityContextHolder.getContext().setAuthentication(authentication);
             
-            // 创建会话并保存安全上下文
             HttpSession session = request.getSession(true);
             session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, 
                                 SecurityContextHolder.getContext());
             
-            return RestBean.success("登录成功");
+            // 获取用户角色
+            String role = authentication.getAuthorities().iterator().next().getAuthority();
+            // 移除 "ROLE_" 前缀（如果存在）
+            if (role.startsWith("ROLE_")) {
+                role = role.substring(5);
+            }
+            
+            Map<String, Object> result = new java.util.HashMap<>();
+            result.put("message", "登录成功");
+            result.put("role", role);
+            result.put("username", username);
+            
+            return RestBean.success(result);
         } catch (AuthenticationException e) {
-            return RestBean.failure(401, "用户名或密码错误");
+            // 修复：返回 Map 类型而不是 String
+            Map<String, Object> errorResult = new java.util.HashMap<>();
+            errorResult.put("message", "用户名或密码错误");
+            return RestBean.failure(401, errorResult);
         }
     }
 

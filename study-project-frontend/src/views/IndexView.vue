@@ -22,21 +22,8 @@
             </template>
           </el-dropdown>
         </div>
-        <!-- <el-menu
-                      :default-active="activeIndex"
-                      class="el-menu-demo"
-                      mode="horizontal"
-                      :ellipsis="false"
-                      @select="handleSelect"
-              >
-                      <el-sub-menu index="2">
-                          <template #title>账户</template>
-                          <el-menu-item index="2-1">个人信息</el-menu-item>
-                          <el-menu-item index="2-2">其他</el-menu-item>
-                          <el-menu-item index="2-3" @click="logout">退出登录</el-menu-item>
-                      </el-sub-menu>
-                    
-                  </el-menu> -->
+
+
       </el-header>
       <el-container>
         <el-aside width="200px">

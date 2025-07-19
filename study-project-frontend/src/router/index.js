@@ -45,6 +45,28 @@ const router = createRouter({
           component:()=>import('@/components/datasource/dbmove.vue')
         },
       ]
+    },{
+      // 新增管理员路由
+      path:'/admin',
+      name:'admin',
+      component:() => import('@/views/AdminView.vue'),
+      children:[
+        {
+          path:'',
+          name:'admin-dashboard',
+          component:()=>import('@/components/admin/Dashboard.vue')
+        },
+        {
+          path:'users',
+          name:'admin-users',
+          component:()=>import('@/components/admin/UserManagement.vue')
+        },
+        {
+          path:'settings',
+          name:'admin-settings',
+          component:()=>import('@/components/admin/SystemSettings.vue')
+        }
+      ]
     }
   ]
 })
