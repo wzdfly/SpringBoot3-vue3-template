@@ -72,7 +72,7 @@ public class AuthorizeServiceImpl implements AuthorizeService {
         }
 
         Random random = new Random();
-        int code = random.nextInt(999999);
+        int code = random.nextInt(900000) + 100000; // ✅ 确保生成6位数字
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(from);
         message.setTo(email);

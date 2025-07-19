@@ -1,9 +1,5 @@
 package com.example.test;
 
-import java.security.MessageDigest;
-import java.security.SecureRandom;
-import java.util.Base64;
-
 public class SimplePasswordTest {
     public static void main(String[] args) {
         String rawPassword = "123456";

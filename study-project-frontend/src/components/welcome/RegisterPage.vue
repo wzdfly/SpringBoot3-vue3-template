@@ -47,9 +47,10 @@
                         </el-col>
                         <el-col :span="6" style="margin-top: 10px;">
                             <el-button type="success" @click="validateEmail" 
-                                       :disabled="!isEmailValid|| coldTime>0">
-                                       {{ coldTime > 0 ? '请稍后'+coldTime+'秒':'获取验证码' }}
-                                       </el-button>
+                                       :disabled="!isEmailValid || coldTime > 0 || isLoading"
+                                       :loading="isLoading">
+                                {{ isLoading ? '发送中...' : (coldTime > 0 ? `请稍后${coldTime}秒` : '获取验证码') }}
+                            </el-button>
                         </el-col>
                     </el-row>
                 </el-form-item>
@@ -75,6 +76,7 @@ import {Lock, User, Message, EditPen} from "@element-plus/icons-vue";
 import {reactive, ref} from "vue";
 import {post} from "@/net";
 import {ElMessage} from "element-plus";
+import axios from 'axios';
 
 const form = reactive(
     {
@@ -126,9 +128,54 @@ const rules = {
     ]
 }
 const formRef = ref() //获取表单信息
-const isEmailValid = ref('false')
+const isEmailValid = ref(false) // 修正：应该是 false 而不是 'false'
 const isSendEmail = ref(false)
 const coldTime = ref(0)
+const countdownTimer = ref(null) // 新增：用于存储定时器引用
+const isLoading = ref(false) // 新增：加载状态
+
+const validateEmail = () => {
+    if (isLoading.value) return; // 防止重复点击
+    
+    isLoading.value = true; // 开始加载
+    
+    // 使用URLSearchParams发送form-data格式
+    const params = new URLSearchParams();
+    params.append('email', form.email);
+    
+    axios.post('/api/auth/valid-register-email', params, {
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        withCredentials: true
+    }).then(({ data }) => {
+        if (data.success) {
+            ElMessage.success(data.message || '验证码已发送，请注意查收');
+            coldTime.value = 60;
+            
+            // 清除之前的定时器
+            if (countdownTimer.value) {
+                clearInterval(countdownTimer.value);
+            }
+            
+            // 创建新的定时器
+            countdownTimer.value = setInterval(() => {
+                coldTime.value--;
+                if (coldTime.value <= 0) {
+                    clearInterval(countdownTimer.value);
+                    countdownTimer.value = null;
+                }
+            }, 1000);
+        } else {
+            ElMessage.warning(data.message || '发送失败，请重试');
+        }
+    }).catch((error) => {
+        console.error('验证码发送失败:', error);
+        ElMessage.error('网络错误，请检查网络连接后重试');
+    }).finally(() => {
+        isLoading.value = false; // 结束加载
+    });
+}
 const onValidate = (prop,isValid)=>{
     if(prop==='email')
         isEmailValid.value = isValid
@@ -136,28 +183,32 @@ const onValidate = (prop,isValid)=>{
 const register = () => {
     formRef.value.validate((isValid)=>{
         if(isValid){
-            post('/api/auth/register',{
-                username:form.username,
-                password:form.password,
-                email: form.email,
-                code:form.code
-            },(message)=>{
-                ElMessage.success(message)
-                router.push("/")
-            })
+            // 使用URLSearchParams发送form-data格式
+            const params = new URLSearchParams();
+            params.append('username', form.username);
+            params.append('password', form.password);
+            params.append('email', form.email);
+            params.append('code', form.code);
+            
+            axios.post('/api/auth/register', params, {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                withCredentials: true
+            }).then(({ data }) => {
+                if (data.success) {
+                    ElMessage.success(data.message);
+                    router.push("/");
+                } else {
+                    ElMessage.warning(data.message);
+                }
+            }).catch(() => {
+                ElMessage.error('发生了一些错误，请联系管理员');
+            });
         }else{
             ElMessage.warning('请完整填写上述表单注册内容')
         }
     })
-}
-const validateEmail = () =>{
-   post('/api/auth/valid-email',{
-       email:form.email
-   },(message)=>{
-       ElMessage.success(message)
-       coldTime.value = 60
-       setInterval(()=>coldTime.value--,1000)
-   } )
 }
 </script>
 

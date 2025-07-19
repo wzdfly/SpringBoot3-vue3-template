@@ -95,6 +95,7 @@ import {EditPen, Lock, Message, User} from "@element-plus/icons-vue";
 import {reactive, ref} from "vue";
 import {ElMessage} from "element-plus";
 import {post} from "@/net";
+import axios from 'axios';
 
 const formRef = ref() //获取表单信息
 const isEmailValid = ref(false)
@@ -141,40 +142,97 @@ const onValidate = (prop,isValid)=>{
         isEmailValid.value = isValid
 }
 const validateEmail = () =>{
-    post('/api/auth/valid-reset-email',{
-        email:form.email
-    },(message)=>{
-        ElMessage.success(message)
-        coldTime.value = 60
-        setInterval(()=>coldTime.value--,1000)
-    } )
+    // 使用URLSearchParams发送form-data格式
+    const params = new URLSearchParams();
+    params.append('email', form.email);
+    
+    axios.post('/api/auth/valid-reset-email', params, {
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        withCredentials: true
+    }).then(({ data }) => {
+        const countdownTimer = ref(null); // 添加定时器引用
+    
+        // 在validateEmail成功后的处理中：
+        if (data.success) {
+            ElMessage.success(data.message || '验证码已发送，请注意查收');
+            coldTime.value = 60;
+            
+            // 清除之前的定时器
+            if (countdownTimer.value) {
+                clearInterval(countdownTimer.value);
+            }
+            
+            // 创建新的定时器
+            countdownTimer.value = setInterval(() => {
+                coldTime.value--;
+                if (coldTime.value <= 0) {
+                    clearInterval(countdownTimer.value);
+                    countdownTimer.value = null;
+                }
+            }, 1000);
+        } else {
+            ElMessage.warning(data.message || '发送失败，请重试');
+        }
+    }).catch((error) => {
+        console.error('验证码发送失败:', error);
+        ElMessage.error('网络错误，请检查网络连接后重试');
+    });
 }
 
 const startReset = () =>{
     formRef.value.validate((isValid)=>{
         if(isValid){
-            post('/api/auth/start-rest',{
-                email: form.email,
-                code: form.code
-            }, () =>{
-                active.value = 1
-            })
+            // 使用URLSearchParams发送form-data格式
+            const params = new URLSearchParams();
+            params.append('email', form.email);
+            params.append('code', form.code);
+            
+            axios.post('/api/auth/start-rest', params, {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                withCredentials: true
+            }).then(({ data }) => {
+                if (data.success) {
+                    active.value = 1;
+                } else {
+                    ElMessage.warning(data.message || '验证失败，请重试');
+                }
+            }).catch((error) => {
+                console.error('验证失败:', error);
+                ElMessage.error('网络错误，请检查网络连接后重试');
+            });
         }else{
             ElMessage.warning('请填写电子邮件地址和验证码')
         }
     })
-
 }
 
 const doReset = () =>{
     formRef.value.validate((isValid) => {
         if(isValid){
-            post('/api/auth/do-rest',{
-                password:form.password
-            }, () =>{
-                ElMessage.success('密码重置成功！')
-                router.push('/')
-            })
+            // 使用URLSearchParams发送form-data格式
+            const params = new URLSearchParams();
+            params.append('password', form.password);
+            
+            axios.post('/api/auth/do-rest', params, {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                withCredentials: true
+            }).then(({ data }) => {
+                if (data.success) {
+                    ElMessage.success('密码重置成功！');
+                    router.push('/');
+                } else {
+                    ElMessage.warning(data.message || '重置失败，请重试');
+                }
+            }).catch((error) => {
+                console.error('密码重置失败:', error);
+                ElMessage.error('网络错误，请检查网络连接后重试');
+            });
         }else{
             ElMessage.warning('请填写新密码')
         }

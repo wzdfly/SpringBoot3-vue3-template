@@ -1,3 +1,4 @@
+#application.yaml
 spring:
 #  datasource:
 #    driver-class-name: dm.jdbc.driver.DmDriver
@@ -11,9 +12,18 @@ spring:
     password: 123456
   mail:
     host: smtp.qq.com
+    port: 587
     username: 1689411538@qq.com
     password: lxvtoyflfydrcehi
     properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          ssl:
+            trust: smtp.qq.com
       from: 1689411538@qq.com
   # 移除Redis配置
   # data:
