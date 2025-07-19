@@ -9,7 +9,8 @@
 
 ## 后端
 
-- Java版本: Java 11
+- Java版本: Java 17
+- MySQL版本: 5.7
 - 开发框架: SpringBoot 3
 - 数据访问: MyBatis
 - 项目管理: Maven
