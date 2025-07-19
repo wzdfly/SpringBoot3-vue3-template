@@ -28,14 +28,16 @@ public class AuthorizeServiceImpl implements AuthorizeService {
     @Resource
     UserMapper mapper;
 
-    // 替换Redis为数据库mapper
     @Resource
     EmailVerificationCodeMapper codeMapper;
 
     @Resource
     MailSender mailSender;
 
-    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    // 使用@Lazy注解延迟加载，避免循环依赖
+    @Resource
+    @org.springframework.context.annotation.Lazy
+    BCryptPasswordEncoder encoder;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException{
