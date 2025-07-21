@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 public interface AuthorizeService extends UserDetailsService {
     UserDetails loadUserByUsername(String username);
+    
     String sendValidateEmail(String email, String sessionId,boolean hasAccount);
 
     String validateAndRegister(String username,String password,String email,String code,String sessionId);

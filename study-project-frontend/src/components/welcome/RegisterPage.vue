@@ -127,17 +127,17 @@ const rules = {
         {required: true,message: '请输入获取的验证码',tigger: 'blur'},
     ]
 }
-const formRef = ref() //获取表单信息
-const isEmailValid = ref(false) // 修正：应该是 false 而不是 'false'
+const formRef = ref()
+const isEmailValid = ref(false) 
 const isSendEmail = ref(false)
 const coldTime = ref(0)
-const countdownTimer = ref(null) // 新增：用于存储定时器引用
-const isLoading = ref(false) // 新增：加载状态
+const countdownTimer = ref(null) 
+const isLoading = ref(false) 
 
 const validateEmail = () => {
-    if (isLoading.value) return; // 防止重复点击
+    if (isLoading.value) return;
     
-    isLoading.value = true; // 开始加载
+    isLoading.value = true;
     
     // 使用URLSearchParams发送form-data格式
     const params = new URLSearchParams();
@@ -173,7 +173,7 @@ const validateEmail = () => {
         console.error('验证码发送失败:', error);
         ElMessage.error('网络错误，请检查网络连接后重试');
     }).finally(() => {
-        isLoading.value = false; // 结束加载
+        isLoading.value = false; 
     });
 }
 const onValidate = (prop,isValid)=>{
@@ -211,8 +211,6 @@ const register = () => {
     })
 }
 </script>
-
-
 
 <style scoped>
 

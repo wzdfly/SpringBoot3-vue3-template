@@ -88,8 +88,11 @@ public class SecurityConfiguration {
     public AuthenticationManager authenticationManager(HttpSecurity security) throws Exception {
         return security
                 .getSharedObject(AuthenticationManagerBuilder.class)
+                //AuthorizeService继承了UserDetailsService，UserDetailsService定义了loadUserByUsername方法
+                //当 Spring Security 需要验证用户时，会调用 UserDetailsService.loadUserByUsername() ，
+                //但实际执行的是 AuthorizeServiceImpl.loadUserByUsername() 的具体实现
                 .userDetailsService(authorizeservice)
-                .passwordEncoder(passwordEncoder())
+                .passwordEncoder(passwordEncoder()) 
                 .and()
                 .build();
     }

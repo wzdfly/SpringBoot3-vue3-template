@@ -66,9 +66,6 @@ const login = () => {
             password: form.password,
             remember: form.remember
         }, (data) => {
-            // 添加调试日志
-            console.log('登录成功，返回数据：', data);
-            
             // 现在 data 是完整的对象：{message: "登录成功", role: "USER", username: "xxx"}
             ElMessage.success(data.message || '登录成功')
             
@@ -79,12 +76,8 @@ const login = () => {
                 router.push('/index')  // 普通用户界面
             }
         }, (message) => {
-            // 添加失败处理的调试日志
-            console.log('登录失败：', message);
             ElMessage.error(message || '登录失败');
         }, (error) => {
-            // 添加错误处理的调试日志
-            console.log('登录错误：', error);
             ElMessage.error('发生了一些错误，请联系管理员');
         })
     }

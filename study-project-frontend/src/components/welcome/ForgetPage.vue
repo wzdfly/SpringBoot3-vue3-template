@@ -44,8 +44,15 @@
             <div style="margin-top: 40px;text-align: center">
                 <el-button @click="startReset" style="width: 270px;" type="warning">开始重置密码</el-button>
             </div>
+            <div style="margin-top: 20px;text-align: center">
+                <el-link @click="goBack" style="display: inline-flex; align-items: center;">
+                    <el-icon style="margin-right: 5px;"><ArrowLeft /></el-icon>
+                    返回登录
+                </el-link>
+            </div>
         </div>
     </transition>
+    
     <transition name="el-fade-in-linear" mode="out-in">
         <div style="padding: 20px" v-if="active === 1">
             <div style="margin-top: 130px;text-align: center">
@@ -91,7 +98,7 @@
 <script setup>
 
 import router from "@/router";
-import {EditPen, Lock, Message, User} from "@element-plus/icons-vue";
+import {EditPen, Lock, Message, User, ArrowLeft} from "@element-plus/icons-vue";
 import {reactive, ref} from "vue";
 import {ElMessage} from "element-plus";
 import {post} from "@/net";
@@ -239,6 +246,8 @@ const doReset = () =>{
     })
 }
 
-
+const goBack = () => {
+    router.push('/');
+}
 
 </script>

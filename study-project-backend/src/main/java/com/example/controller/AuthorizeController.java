@@ -45,10 +45,12 @@ public class AuthorizeController {
         }
         
         try {
+            //创建认证令牌
             UsernamePasswordAuthenticationToken authToken = 
                 new UsernamePasswordAuthenticationToken(username, password);
-            
+            //执行认证（这里会触发数据库查询和密码比对）
             Authentication authentication = authenticationManager.authenticate(authToken);
+            
             SecurityContextHolder.getContext().setAuthentication(authentication);
             
             HttpSession session = request.getSession(true);
@@ -90,7 +92,6 @@ public class AuthorizeController {
     //邮箱验证
     @PostMapping("/valid-register-email")
     public RestBean<String> validateRegisterEmail(@Pattern (regexp = EMAIL_REGEX )@RequestParam("email") String email, HttpSession session){
-
 
         String s =  service.sendValidateEmail(email,session.getId(),false);
         if(s == null)

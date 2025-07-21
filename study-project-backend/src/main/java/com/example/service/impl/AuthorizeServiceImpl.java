@@ -82,7 +82,7 @@ public class AuthorizeServiceImpl implements AuthorizeService {
         message.setFrom(from);
         message.setTo(email);
         message.setSubject("您的验证邮件");
-        message.setText("您好，欢迎注册物流中台系统，验证码为：" + code);
+        message.setText("您好，欢迎注册物流中台系统，验证码为：" + code + "，如果您意外收到此邮件，请忽略。");
         
         try{
             mailSender.send(message);
