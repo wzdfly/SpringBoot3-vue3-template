@@ -77,12 +77,12 @@ public class AuthorizeServiceImpl implements AuthorizeService {
         }
 
         Random random = new Random();
-        int code = random.nextInt(900000) + 100000; // ✅ 确保生成6位数字
+        int code = random.nextInt(900000) + 100000; // 确保生成6位数字
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(from);
         message.setTo(email);
         message.setSubject("您的验证邮件");
-        message.setText("您好，欢迎注册物流中台系统，验证码为：" + code + "，如果您意外收到此邮件，请忽略。");
+        message.setText("您好，欢迎注册曲易宿舍管理系统，验证码为：" + code + "，如果您意外收到此邮件，请忽略。");
         
         try{
             mailSender.send(message);

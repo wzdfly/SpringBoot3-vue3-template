@@ -4,7 +4,7 @@
       <el-header style="padding: 0;height: 80px">
         <div id="logo">
           <img src="../img/logo.png" alt="" id="img1" />
-          <span id="title">物流中台系统</span>
+          <span id="title">曲易宿舍管理系统</span>
         </div>
         <div class="flex flex-wrap items-center">
           <el-dropdown>

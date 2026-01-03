@@ -2,14 +2,14 @@ import axios from "axios";
 import 'element-plus/es/components/message/style/css';
 import {ElMessage} from "element-plus";
 
+// 设置axios默认配置
+axios.defaults.baseURL = 'http://localhost:8080';
+
 const defaultError = () => ElMessage.error('发生了一些错误，请联系管理员');
 const defaultFailure = (message) => ElMessage.warning(message);
 
 function post(url, data, success, failure = defaultFailure, error = defaultError) {
     axios.post(url, data, {
-        headers: {
-            'Content-Type': 'application/json'
-        },
         withCredentials: true
     }).then(({ data }) => {
         console.log('完整的后端响应：', data);
@@ -34,7 +34,6 @@ function get(url, success, failure = defaultFailure, error = defaultError) {
         withCredentials: true
     }).then(({ data }) => {
         if (data.success) {
-            // 同样修改 GET 方法
             success(data.message, data.status);
         } else {
             const errorMessage = (typeof data.message === 'object' && data.message.message) 

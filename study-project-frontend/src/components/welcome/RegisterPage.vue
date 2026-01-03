@@ -176,7 +176,7 @@ const validateEmail = () => {
         isLoading.value = false; 
     });
 }
-const onValidate = (prop,isValid)=>{
+const onValidate = (prop,isValid)=>{//验证邮箱是否合法
     if(prop==='email')
         isEmailValid.value = isValid
 }

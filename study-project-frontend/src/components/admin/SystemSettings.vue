@@ -30,7 +30,7 @@
 import { ref } from 'vue';
 
 const settings = ref({
-  systemName: '物流中台系统',
+  systemName: '智能宿舍管理系统',
   systemDesc: '结合大数据平台，为客户提供数据获取、数据治理、数据共享等优质服务！',
   mailServer: 'smtp.qq.com',
   mailPort: '587'
