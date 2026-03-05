@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 @Data
 public class EmailVerificationCode {
     private Long id;
-    private String email;
+    private String mail;
     private String code;
     private String sessionId;
     private Boolean hasAccount;

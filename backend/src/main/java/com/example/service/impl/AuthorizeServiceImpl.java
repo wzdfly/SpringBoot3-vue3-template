@@ -41,12 +41,15 @@ public class AuthorizeServiceImpl implements AuthorizeService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        System.out.println("尝试登录的用户: " + username);
         if(username == null)
             throw new UsernameNotFoundException("用户名不能为空");
         Account account = mapper.findAccountWithRoleByUsername(username);
-        if(account == null)
+        if(account == null) {
+            System.out.println("数据库中未找到用户: " + username);
             throw new UsernameNotFoundException("用户名或密码错误");
-        
+        }
+        System.out.println("数据库查出的信息: " + account);
         // 根据数据库中的角色设置权限
         String role = account.getRole() != null ? account.getRole() : "USER";
         return User
@@ -82,7 +85,7 @@ public class AuthorizeServiceImpl implements AuthorizeService {
         message.setFrom(from);
         message.setTo(email);
         message.setSubject("您的验证邮件");
-        message.setText("您好，欢迎注册曲易宿舍管理系统，验证码为：" + code + "，如果您意外收到此邮件，请忽略。");
+        message.setText("您好，欢迎注册宿舍管理系统，验证码为：" + code + "，如果您意外收到此邮件，请忽略。");
         
         try{
             mailSender.send(message);
