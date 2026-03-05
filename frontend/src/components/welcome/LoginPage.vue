@@ -50,6 +50,9 @@ import {reactive} from "vue";
 import {ElMessage} from "element-plus";
 import router from "@/router";
 import {post} from "@/net";
+import {useUserStore} from "@/stores/user";
+
+const userStore = useUserStore()
 
 const form = reactive({
     username:'',
@@ -65,15 +68,20 @@ const login = () => {
             username: form.username,
             password: form.password,
             remember: form.remember
-        }, (data) => {
+        }, (data, status) => {
             // 现在 data 是完整的对象：{message: "登录成功", role: "USER", username: "xxx"}
-            ElMessage.success(data.message || '登录成功')
+            ElMessage.success('登录成功')
+            
+            // 将用户信息存入 store
+            userStore.setUser(data.username, data.role)
             
             // 根据角色跳转到不同界面
-            if (data.role === 'ADMIN') {
-                router.push('/admin')  // 管理员界面
-            } else {
-                router.push('/index')  // 普通用户界面
+            if (data.role === 'SYS_ADMIN' || data.role === 'ADMIN') {
+                router.push('/admin')  // 系统管理员界面
+            } else if (data.role === 'DORM_ADMIN') {
+                router.push('/dorm')   // 宿舍管理员界面
+            } else if (data.role === 'STUDENT') {
+                router.push('/student') // 学生端界面
             }
         }, (message) => {
             ElMessage.error(message || '登录失败');

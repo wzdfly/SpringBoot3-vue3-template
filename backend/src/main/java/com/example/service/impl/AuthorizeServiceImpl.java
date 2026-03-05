@@ -41,17 +41,15 @@ public class AuthorizeServiceImpl implements AuthorizeService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        System.out.println("尝试登录的用户: " + username);
         if(username == null)
             throw new UsernameNotFoundException("用户名不能为空");
         Account account = mapper.findAccountWithRoleByUsername(username);
         if(account == null) {
-            System.out.println("数据库中未找到用户: " + username);
             throw new UsernameNotFoundException("用户名或密码错误");
         }
-        System.out.println("数据库查出的信息: " + account);
+        
         // 根据数据库中的角色设置权限
-        String role = account.getRole() != null ? account.getRole() : "USER";
+        String role = account.getRole() != null ? account.getRole() : "STUDENT";
         return User
                 .withUsername(account.getUsername())
                 .password(account.getPassword())

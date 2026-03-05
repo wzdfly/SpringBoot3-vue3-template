@@ -45,6 +45,9 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
                     .requestMatchers(HttpMethod.OPTIONS).permitAll()
                     .requestMatchers("/api/auth/**").permitAll()
+                    .requestMatchers("/api/sys-admin/**").hasAnyRole("SYS_ADMIN", "ADMIN")
+                    .requestMatchers("/api/dorm-admin/**").hasRole("DORM_ADMIN")
+                    .requestMatchers("/api/student/**").hasRole("STUDENT")
                     .anyRequest().authenticated()
                 )
                 .logout(logout -> logout

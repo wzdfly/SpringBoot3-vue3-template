@@ -37,7 +37,7 @@ public class AdminServiceImpl implements AdminService {
         }
 
         // 验证角色
-        if (!"ADMIN".equals(role) && !"USER".equals(role)) {
+        if (!"SYS_ADMIN".equals(role) && !"ADMIN".equals(role) && !"DORM_ADMIN".equals(role) && !"STUDENT".equals(role)) {
             return "角色参数无效";
         }
 
@@ -69,7 +69,7 @@ public class AdminServiceImpl implements AdminService {
             user.put("id", account.getId());
             user.put("username", account.getUsername());
             user.put("email", account.getMail());
-            user.put("role", account.getRole() != null ? account.getRole() : "USER");
+            user.put("role", account.getRole() != null ? account.getRole() : "STUDENT");
             // 这里可以添加创建时间，如果数据库表有该字段
             user.put("createTime", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
             users.add(user);
@@ -109,7 +109,7 @@ public class AdminServiceImpl implements AdminService {
         }
 
         // 验证角色
-        if (!"ADMIN".equals(role) && !"USER".equals(role)) {
+        if (!"SYS_ADMIN".equals(role) && !"ADMIN".equals(role) && !"DORM_ADMIN".equals(role) && !"STUDENT".equals(role)) {
             return "角色参数无效";
         }
 
